@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useAboutContent } from "@/context/AboutContentContext";
+import { ColorfulInstagram } from "@/components/ColorfulInstagram";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   const { content } = useAboutContent();
@@ -12,13 +14,7 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full gold-gradient flex items-center justify-center">
-                <span className="text-primary-foreground font-display font-bold text-lg">K</span>
-              </div>
-              <div className="leading-tight">
-                <span className="font-display font-bold text-lg text-background block">Kawade</span>
-                <span className="text-xs tracking-widest uppercase text-background/50">Gold Oils</span>
-              </div>
+              <img src={logo} alt="Kawade Gold Oils Logo" className="h-20 md:h-24 w-auto object-contain" />
             </div>
             <p className="text-sm leading-relaxed text-background/60">
               Trusted edible oil wholesaler and distributor in Maharashtra, delivering quality products and building our brand, Radha Oil, with a focus on purity and reliability since 2026.
@@ -75,6 +71,9 @@ const Footer = () => {
                 <MapPin className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>Shivoor Bangla, Maharashtra, India</span>
               </div>
+              <a href="https://www.instagram.com/kawade_gold_oils?igsh=ZmU0eXBvejQyaGlp" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-background/60 hover:text-primary transition-colors mt-2">
+                <ColorfulInstagram className="w-5 h-5 shrink-0" /> Follow on Instagram
+              </a>
             </div>
           </div>
         </div>

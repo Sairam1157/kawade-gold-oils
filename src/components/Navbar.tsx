@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import logo from "@/assets/logo.png";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -29,41 +30,33 @@ const Navbar = () => {
   }, [location]);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-card/95 backdrop-blur-md shadow-lg shadow-foreground/5"
-          : "bg-transparent"
-      }`}
-    >
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-foreground/95 backdrop-blur-md border-b border-white/10 ${scrolled ? "shadow-lg" : ""}`}>
       <div className="container mx-auto flex items-center justify-between py-4">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full gold-gradient flex items-center justify-center">
-            <span className="text-primary-foreground font-display font-bold text-lg">K</span>
-          </div>
-          <div className="leading-tight">
-            <span className="font-display font-bold text-lg block">Kawade</span>
-            <span className="text-xs tracking-widest uppercase text-muted-foreground">Gold Oils</span>
-          </div>
+        <Link to="/" className="flex items-center gap-3">
+          <img src={logo} alt="Kawade Gold Oils Logo" className="h-10 md:h-12 w-auto object-contain scale-[1.5] md:scale-[1.8] origin-left transition-transform duration-300" />
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className={`text-sm font-medium transition-colors hover:text-primary ${
-                location.pathname === link.to ? "text-primary" : "text-foreground/80"
+              className={`text-sm font-semibold transition-all duration-200 hover:scale-105 ${
+                location.pathname === link.to
+                  ? "text-primary gold-gradient-text"
+                  : "text-white/90 hover:text-white hover:shadow-sm"
               }`}
             >
               {link.label}
             </Link>
           ))}
-          <ThemeToggle />
+          <div className="text-white/90">
+            <ThemeToggle />
+          </div>
           <a
             href="tel:+917447297953"
-            className="inline-flex items-center gap-2 gold-gradient px-5 py-2.5 rounded-full text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.97]"
+            className="inline-flex items-center gap-2 gold-gradient px-5 py-2.5 rounded-full text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.97] hover:scale-105"
           >
             <Phone className="w-4 h-4" />
             Call Now
@@ -73,7 +66,7 @@ const Navbar = () => {
         {/* Mobile toggle */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+          className="md:hidden p-2 rounded-lg transition-colors hover:bg-white/20 text-white"
         >
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -81,16 +74,16 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden bg-card border-t border-border animate-reveal-up">
-          <div className="container mx-auto py-4 flex flex-col gap-3">
+        <div className="md:hidden bg-foreground/95 backdrop-blur-md border-t border-border animate-reveal-up shadow-lg">
+          <div className="container mx-auto py-4 flex flex-col gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
                   location.pathname === link.to
-                    ? "bg-primary/10 text-primary"
-                    : "hover:bg-muted"
+                    ? "bg-primary/20 text-background border-l-4 border-primary"
+                    : "text-background/90 hover:bg-background/20 hover:text-background"
                 }`}
               >
                 {link.label}
@@ -98,7 +91,7 @@ const Navbar = () => {
             ))}
             <a
               href="tel:+917447297953"
-              className="inline-flex items-center justify-center gap-2 gold-gradient px-5 py-3 rounded-full text-sm font-semibold text-primary-foreground mt-2"
+              className="inline-flex items-center justify-center gap-2 gold-gradient px-5 py-3 rounded-full text-sm font-semibold text-primary-foreground mt-3"
             >
               <Phone className="w-4 h-4" />
               Call Now

@@ -34,7 +34,7 @@ const ProductCard = ({
         src={image}
         alt={name}
         loading="lazy"
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        className="w-full h-full object-contain p-4 bg-white/50 transition-transform duration-700 group-hover:scale-105"
       />
       <span className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
         {category}
@@ -62,8 +62,7 @@ const ProductCard = ({
           </span>
         )}
       </div>
-      <div className="flex items-center justify-between">
-        <span className="font-semibold text-primary text-lg">{price}</span>
+      <div className="flex items-center justify-end">
         <div className="flex items-center gap-3">
           <Link
             to={`/contact?product=${id}`}

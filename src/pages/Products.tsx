@@ -23,15 +23,74 @@ const Products = () => {
     return ["All", ...unique];
   }, [products]);
 
+  const packagings = useMemo(() => {
+    const allPacks = products.flatMap((p) => p.packagingTypes || []);
+    const unique = [...new Set(allPacks)].sort((a, b) => a.localeCompare(b));
+    return ["All", ...unique];
+  }, [products]);
+
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedPackaging, setSelectedPackaging] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filtered = products.filter((p) => {
-    const matchCategory = selectedCategory === "All" || p.category === selectedCategory;
-    const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCategory && matchSearch;
-  });
+  const filtered = useMemo(() => {
+    // First, separate products into individual items for each packaging type
+    const unrolledProducts: any[] = [];
+    products.forEach((p) => {
+      if (p.packagingTypes && p.packagingTypes.length > 0) {
+        p.packagingTypes.forEach((pack) => {
+          let displayImage = p.image;
+          let displayName = `${p.name} - ${pack}`;
+          let displayDescription = p.description;
+
+          if (pack === "Tin") {
+            if (p.id === "soybean-oil") {
+              displayImage = "/soybean-tin.jpg";
+              displayName = "Radha Soya Oil Tin";
+              // We'll update description here if needed
+            }
+            if (p.id === "sunflower-oil") {
+              displayImage = "/sunflower-tin.jpg";
+              displayName = "Radha Surya Sunflower Oil Tin";
+            }
+            if (p.id === "groundnut-oil") {
+              displayImage = "/groundnut-tin.jpg";
+              displayName = "Radha Shing Groundnut Oil Tin";
+            }
+            if (p.id === "palm-oil") {
+              displayImage = "/palm-tin.jpg";
+              displayName = "Radha Refined Palm Oil Tin";
+            }
+            if (p.id === "mustard-oil") {
+              displayImage = "/mustard-tin.jpg";
+              displayName = "Radha Refined Mustard Oil Tin";
+            }
+          }
+
+          unrolledProducts.push({
+            ...p,
+            id: `${p.id}-${pack.toLowerCase()}`,
+            name: displayName,
+            description: displayDescription,
+            image: displayImage,
+            packagingTypes: [pack],
+            hasPouchPackaging: pack === "Pouch",
+          });
+        });
+      } else {
+        unrolledProducts.push(p);
+      }
+    });
+
+    // Then, apply the filters
+    return unrolledProducts.filter((p) => {
+      const matchCategory = selectedCategory === "All" || p.category === selectedCategory;
+      const matchPackaging = selectedPackaging === "All" || (p.packagingTypes && p.packagingTypes.includes(selectedPackaging as any));
+      const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchCategory && matchPackaging && matchSearch;
+    });
+  }, [products, selectedCategory, selectedPackaging, searchQuery]);
 
   return (
     <div className="pt-24 pb-16">
@@ -47,6 +106,7 @@ const Products = () => {
 
         {/* Filters */}
         <RevealSection className="mb-12">
+          {/* Category Filter */}
           <div className="flex flex-wrap gap-2 mb-4">
             {categories.map((cat) => (
               <button
@@ -62,6 +122,26 @@ const Products = () => {
               </button>
             ))}
           </div>
+
+          {/* Packaging Filter */}
+          <div className="flex flex-wrap items-center gap-2 mb-6">
+            <span className="text-sm font-medium text-muted-foreground mr-2">Packaging:</span>
+            {packagings.map((pack) => (
+              <button
+                key={pack}
+                onClick={() => setSelectedPackaging(pack)}
+                className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all active:scale-[0.97] ${
+                  selectedPackaging === pack
+                    ? "bg-secondary text-secondary-foreground shadow-sm"
+                    : "bg-muted text-muted-foreground hover:bg-secondary/20"
+                }`}
+              >
+                {pack}
+              </button>
+            ))}
+          </div>
+
+          {/* Search */}
           <div className="relative w-full md:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input

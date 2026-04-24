@@ -1,0 +1,39 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Golden gradient for droplet -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+    </linearGradient>
+    <!-- Green gradient for leaves -->
+    <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#228B22;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#006400;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main droplet shape -->
+  <path d="M100 20 
+           C 100 20, 160 80, 160 120 
+           C 160 155, 130 175, 100 175 
+           C 70 175, 40 155, 40 120 
+           C 40 80, 100 20, 100 20 Z" 
+        fill="url(#goldGradient)" 
+        stroke="#DAA520" 
+        stroke-width="2"/>
+  
+  <!-- Left leaf -->
+  <path d="M85 95 
+           C 70 85, 55 90, 45 105 
+           C 50 95, 60 85, 75 80 
+           C 80 85, 83 90, 85 95 Z" 
+        fill="url(#greenGradient)" />
+  
+  <!-- Right leaf -->
+  <path d="M115 95 
+           C 130 85, 145 90, 155 105 
+           C 150 95, 140 85, 125 80 
+           C 120 85, 117 90, 115 95 Z" 
+        fill="url(#greenGradient)" />
+</svg>

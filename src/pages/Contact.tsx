@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Phone, Mail, MapPin, Send, MessageCircle } from "lucide-react";
+import { ColorfulInstagram } from "@/components/ColorfulInstagram";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import SectionHeading from "@/components/SectionHeading";
 import { toast } from "sonner";
@@ -94,6 +95,20 @@ const Contact = () => {
                   <div>
                     <h4 className="font-semibold mb-1">Address</h4>
                     <p className="text-sm text-muted-foreground">Shivoor Bangla,<br />Maharashtra, India</p>
+                  </div>
+                </div>
+              </div>
+            </RevealSection>
+
+            <RevealSection delay={200}>
+              <div className="bg-card rounded-2xl p-6 shadow-md shadow-foreground/5">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 gold-gradient rounded-xl flex items-center justify-center shrink-0">
+                    <ColorfulInstagram className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Instagram</h4>
+                    <a href="https://www.instagram.com/kawade_gold_oils?igsh=ZmU0eXBvejQyaGlp" target="_blank" rel="noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">@kawade_gold_oils</a>
                   </div>
                 </div>
               </div>
