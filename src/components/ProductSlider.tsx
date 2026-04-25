@@ -60,7 +60,7 @@ const ProductSlider = ({ products }: { products: ProductSlideItem[] }) => {
       <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 z-10 pointer-events-none bg-gradient-to-l from-muted/80 to-transparent" />
 
       {/* Scrollable track */}
-      <div className="overflow-hidden px-4 sm:px-16 py-6">
+      <div className="overflow-x-auto scrollbar-hide px-4 sm:px-16 py-6 snap-x snap-mandatory scroll-smooth touch-pan-x">
         <motion.div
           ref={trackRef}
           animate={controls}

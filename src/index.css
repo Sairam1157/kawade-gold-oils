@@ -286,3 +286,27 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
 }
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch pan for smooth scrolling */
+.touch-pan-x {
+  touch-action: pan-x pan-y;
+}
+
+/* Snap scrolling */
+.snap-x {
+  scroll-snap-type: x mandatory;
+}
+
+.snap-mandatory > * {
+  scroll-snap-align: start;
+}

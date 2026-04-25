@@ -6,7 +6,7 @@ import TempleDivider from "@/components/TempleDivider";
 import TempleLayout from "@/components/TempleLayout";
 import { FloatingLotus, DivineLightRays, SacredFrame } from "@/components/DivineElements";
 import { useAboutContent } from "@/context/AboutContentContext";
-import factoryImg from "@/assets/about-factory.jpg";
+import factoryImg from "@/assets/hd-slide-4.jpg";
 
 const values = [
   { icon: Heart, title: "Purity First", desc: "Every batch is tested to ensure zero adulteration and maximum nutrition." },
@@ -61,7 +61,7 @@ const About = () => {
           <SacredFrame className="p-2">
             <div className="relative">
               <img
-                src={content.aboutImage || factoryImg}
+                src={factoryImg}
                 alt="Kawade Gold Oils processing facility"
                 className="rounded-2xl shadow-xl w-full"
               />

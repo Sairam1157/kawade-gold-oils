@@ -7,7 +7,7 @@ import TempleLayout from "@/components/TempleLayout";
 import TempleDivider from "@/components/TempleDivider";
 import { DivineLightRays } from "@/components/DivineElements";
 import { useAboutContent } from "@/context/AboutContentContext";
-import factoryImg from "@/assets/about-factory.jpg";
+import factoryImg from "@/assets/hd-slide-3.jpg";
 
 function RevealSection({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const { ref, isVisible } = useScrollReveal();
@@ -104,15 +104,21 @@ const Manufacturing = () => {
 
             <RevealSection delay={120}>
               <div className="bg-card rounded-3xl overflow-hidden shadow-xl shadow-primary/10 border border-primary/10">
-                <img src={content.manufacturingImage || factoryImg} alt="Factory" className="w-full h-64 sm:h-80 object-cover" />
-                <div className="p-6 grid grid-cols-3 gap-4 text-center border-t border-border/50">
-                  {content.manufacturingStats.map((s) => (
-                    <div key={s.label}>
-                      <div className="font-display text-2xl font-bold text-primary">{s.value}</div>
-                      <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
-                    </div>
-                  ))}
-                </div>
+                <img
+                  src={factoryImg}
+                  alt="Factory"
+                  className="w-full block object-cover object-center max-h-[320px] sm:max-h-[420px] md:max-h-[520px]"
+                />
+                {content.manufacturingStats && content.manufacturingStats.length > 0 && (
+                  <div className="p-6 grid grid-cols-3 gap-4 text-center border-t border-border/50">
+                    {content.manufacturingStats.map((s) => (
+                      <div key={s.label}>
+                        <div className="font-display text-2xl font-bold text-primary">{s.value}</div>
+                        <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </RevealSection>
           </div>

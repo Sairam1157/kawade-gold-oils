@@ -4,8 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import slide1 from "@/assets/final-slide-1.jpg";
 import slide2 from "@/assets/final-slide-2.jpg";
-import slide3 from "@/assets/final-slide-3.jpg";
-import slide4 from "@/assets/final-slide-4.jpg";
+import slide3 from "@/assets/final-slide-4.jpg";
+import slide4 from "@/assets/hd-slide-3.jpg";
+
+
 
 const slides = [
   {
@@ -21,13 +23,15 @@ const slides = [
   {
     id: 3,
     image: slide3,
-    primaryAction: { text: "Contact Us", link: "/contact" },
+    primaryAction: { text: "View All Products", link: "/products" },
   },
   {
     id: 4,
     image: slide4,
-    primaryAction: { text: "Bulk Orders", link: "/bulk" },
+    primaryAction: { text: "View All Products", link: "/products" },
   },
+ 
+  
 ];
 
 const INTERVAL = 6000;

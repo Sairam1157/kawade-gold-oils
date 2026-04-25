@@ -46,11 +46,7 @@ export function defaultAboutContent(): AboutContentV1 {
     futureHeading: "Future Vision",
     futureParagraph:
       "Our goal is to grow Kawade Gold Oils into a trusted and recognized brand across India, known for honesty, quality, and dependable service in the edible oil industry.",
-    manufacturingStats: [
-      { value: "25+", label: "Years" },
-      { value: "4", label: "Packaging" },
-      { value: "500+", label: "Tons/Month" },
-    ],
+    manufacturingStats: [],
     manufacturingImage: "/about-factory.jpg",
     aboutImage: "/about-factory.jpg",
     aboutYearsValue: "25+",
