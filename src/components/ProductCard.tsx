@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { MouseEvent } from "react";
 
 interface ProductCardProps {
   id: string;
@@ -24,64 +26,122 @@ const ProductCard = ({
   hasPouchPackaging,
   bulkPricingAvailable,
   delay = 0,
-}: ProductCardProps) => (
-  <div
-    className="group bg-card rounded-2xl overflow-hidden shadow-md shadow-foreground/5 hover:shadow-xl hover:shadow-primary/10 transition-all duration-500"
-    style={{ animationDelay: `${delay}ms` }}
-  >
-    <div className="relative overflow-hidden aspect-square">
-      <img
-        src={image}
-        alt={name}
-        loading="lazy"
-        className="w-full h-full object-contain p-4 bg-white/50 transition-transform duration-700 group-hover:scale-105"
-      />
-      <span className="absolute top-4 left-4 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
-        {category}
-      </span>
-    </div>
-    <div className="p-6">
-      <h3 className="font-display font-semibold text-lg mb-1">{name}</h3>
-      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{description}</p>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {packagingTypes.map((pack) => (
-          <span key={pack} className="text-xs font-medium px-2.5 py-1 rounded-full bg-muted text-muted-foreground">
-            {pack}
+}: ProductCardProps) => {
+  
+  // 3D Tilt Physics
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
+  
+  // Dynamic Glare effect based on mouse position
+  const glareX = useTransform(mouseXSpring, [-0.5, 0.5], ["100%", "0%"]);
+  const glareY = useTransform(mouseYSpring, [-0.5, 0.5], ["100%", "0%"]);
+  const glareOpacity = useTransform(mouseXSpring, [-0.5, 0, 0.5], [0.5, 0, 0.5]);
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    // Convert to percentage -0.5 to 0.5
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.6, delay: delay / 1000, ease: [0.16, 1, 0.3, 1] }}
+      style={{ perspective: 1000 }} // Perspective context for 3D
+      className="h-full"
+    >
+      <motion.div
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        className="group relative h-full bg-card rounded-3xl overflow-hidden shadow-lg shadow-primary/5 hover:shadow-2xl hover:shadow-primary/20 border border-border/60 hover:border-primary/40 transition-shadow duration-500 flex flex-col"
+      >
+        {/* Dynamic Glare Overlay */}
+        <motion.div
+          className="absolute inset-0 z-20 pointer-events-none rounded-3xl"
+          style={{
+            background: "radial-gradient(circle at center, rgba(255,255,255,0.4) 0%, transparent 60%)",
+            opacity: glareOpacity,
+            left: glareX,
+            top: glareY,
+            transform: "translate(-50%, -50%)",
+            width: "200%",
+            height: "200%"
+          }}
+        />
+
+        <div className="relative overflow-hidden aspect-square flex-shrink-0" style={{ transform: "translateZ(30px)" }}>
+          {/* Subtle background glow for product */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+          
+          <motion.img
+            src={image}
+            alt={name}
+            loading="lazy"
+            className="w-full h-full object-contain p-6 relative z-10 drop-shadow-xl"
+            whileHover={{ scale: 1.08 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          />
+          <span className="absolute top-5 left-5 z-10 bg-primary text-primary-foreground text-[10px] font-bold tracking-wider px-3 py-1 rounded-full uppercase shadow-md">
+            {category}
           </span>
-        ))}
-      </div>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {hasPouchPackaging && (
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">
-            Pouch Packaging Available
-          </span>
-        )}
-        {bulkPricingAvailable && (
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-secondary/10 text-secondary">
-            Bulk Pricing Available
-          </span>
-        )}
-      </div>
-      <div className="flex items-center justify-end">
-        <div className="flex items-center gap-3">
-          <Link
-            to={`/contact?product=${id}`}
-            className="text-sm font-semibold text-secondary hover:text-red-dark transition-colors"
-          >
-            Enquire Now
-          </Link>
-          <a
-            href={`https://wa.me/917447297953?text=${encodeURIComponent(`Hi, I need bulk pricing for ${name}.`)}`}
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-          >
-            Request Bulk Quote
-          </a>
         </div>
-      </div>
-    </div>
-  </div>
-);
+
+        <div className="p-6 pt-2 flex flex-col flex-1" style={{ transform: "translateZ(20px)" }}>
+          <h3 className="font-display font-bold text-xl mb-2">{name}</h3>
+          <p className="text-sm text-muted-foreground mb-5 line-clamp-2 leading-relaxed flex-1">{description}</p>
+          
+          <div className="flex flex-wrap gap-1.5 mb-5">
+            {packagingTypes.filter(pack => pack !== "Bulk").map((pack) => (
+              <span key={pack} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-muted border border-border text-muted-foreground">
+                {pack}
+              </span>
+            ))}
+            {hasPouchPackaging && (
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                Pouch
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 mt-auto">
+            <Link
+              to={`/contact?product=${id}`}
+              className="flex-1 text-center text-sm font-bold py-3 rounded-xl gold-gradient text-primary-foreground shadow-md hover:shadow-lg hover:scale-105 transition-all active:scale-95"
+            >
+              Enquire Now
+            </Link>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 export default ProductCard;

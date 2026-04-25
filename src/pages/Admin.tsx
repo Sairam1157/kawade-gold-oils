@@ -519,6 +519,7 @@ function AdminDashboard() {
   const { content: about, setContent: setAbout, resetContent: resetAbout } = useAboutContent();
   const { content: home, setContent: setHome, resetContent: resetHome } = useHomeContent();
   const importInputRef = useRef<HTMLInputElement>(null);
+  const aboutImportInputRef = useRef<HTMLInputElement>(null);
   const [aboutDraft, setAboutDraft] = useState(about);
   const [statsDraft, setStatsDraft] = useState<Stat[]>(home.stats);
   const [testimonialsDraft, setTestimonialsDraft] = useState<Testimonial[]>(home.testimonials);
@@ -563,6 +564,19 @@ function AdminDashboard() {
     });
   };
 
+  const exportAbout = () => {
+    const aboutState = JSON.parse(localStorage.getItem(KAWADE_ABOUT_STORAGE_KEY) || "null") || about;
+    const blob = new Blob([JSON.stringify(aboutState, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "kawade-about.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast.success("Download started", {
+      description: "This file includes About page settings and embedded images (if uploaded).",
+    });
+  };
+
   const onImportFile: ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files?.[0];
     e.target.value = "";
@@ -578,6 +592,26 @@ function AdminDashboard() {
         toast.success("Catalog imported");
       } catch {
         toast.error("Invalid file", { description: "Choose a kawade-catalog.json file exported from this admin." });
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const onImportAboutFile: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result as string) as any;
+        if (!data || typeof data !== "object") throw new Error("invalid");
+        // Normalize and persist
+        const normalized = { ...defaultAboutContent(), ...data, version: 1 };
+        setAbout(normalized);
+        toast.success("About imported", { description: "About page settings updated from file." });
+      } catch {
+        toast.error("Invalid file", { description: "Choose a kawade-about.json file exported from this admin." });
       }
     };
     reader.readAsText(file);
@@ -604,6 +638,10 @@ function AdminDashboard() {
             <Download className="h-4 w-4" />
             Export JSON
           </Button>
+          <Button variant="outline" className="gap-2" type="button" onClick={exportAbout}>
+            <Download className="h-4 w-4" />
+            Export About
+          </Button>
           <Button
             variant="outline"
             className="gap-2"
@@ -613,6 +651,15 @@ function AdminDashboard() {
             <Upload className="h-4 w-4" />
             Import JSON
           </Button>
+          <Button
+            variant="outline"
+            className="gap-2"
+            type="button"
+            onClick={() => aboutImportInputRef.current?.click()}
+          >
+            <Upload className="h-4 w-4" />
+            Import About
+          </Button>
           <input
             ref={importInputRef}
             type="file"
@@ -621,6 +668,15 @@ function AdminDashboard() {
             aria-hidden
             tabIndex={-1}
             onChange={onImportFile}
+          />
+          <input
+            ref={aboutImportInputRef}
+            type="file"
+            accept="application/json,.json"
+            className="sr-only"
+            aria-hidden
+            tabIndex={-1}
+            onChange={onImportAboutFile}
           />
           <Button variant="outline" className="gap-2" onClick={() => logout()}>
             <LogOut className="h-4 w-4" />

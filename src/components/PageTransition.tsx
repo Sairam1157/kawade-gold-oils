@@ -1,31 +1,30 @@
 import { useLocation } from "react-router-dom";
-import { useEffect, useState, type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const PageTransition = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
-  const [displayChildren, setDisplayChildren] = useState(children);
-  const [transitioning, setTransitioning] = useState(false);
 
+  // Smooth scroll to top on every route change
   useEffect(() => {
-    setTransitioning(true);
-    const timer = setTimeout(() => {
-      setDisplayChildren(children);
-      setTransitioning(false);
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }, 250);
-    return () => clearTimeout(timer);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location.pathname]);
 
   return (
-    <div
-      className={`transition-all duration-[250ms] ease-out ${
-        transitioning
-          ? "opacity-0 translate-y-3 blur-[2px]"
-          : "opacity-100 translate-y-0 blur-0"
-      }`}
-    >
-      {displayChildren}
-    </div>
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={location.pathname}
+        initial={{ opacity: 0, y: 18, filter: "blur(4px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, y: -10, filter: "blur(3px)" }}
+        transition={{
+          duration: 0.45,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

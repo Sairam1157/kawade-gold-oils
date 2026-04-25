@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <title>Kawade Gold Oils — Premium Edible Oil Supplier</title>
     <meta name="description" content="Kawade Gold Oils — Premium wholesale & retail edible oil supplier. Soybean oil, palm oil, and cooking oil delivered across India." />
     <meta name="author" content="Kawade Gold Oils" />
@@ -10,6 +10,30 @@
     <meta property="og:description" content="Premium wholesale & retail edible oil supplier. Soybean oil, palm oil, and cooking oil." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <style>
+      /* Smooth scrolling for the entire page */
+      html {
+        scroll-behavior: smooth;
+      }
+      /* Reduce motion for users who prefer it */
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      /* GPU acceleration for animated elements */
+      .will-animate {
+        will-change: transform, opacity;
+        transform: translateZ(0);
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
